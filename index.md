@@ -1,13 +1,13 @@
 # 咖啡猫的算法屋
-![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
-Once you choose your way of life, be brave to stick it out and never return.
+
+![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png) 既然选择了这条路，要不然平凡，要不然伟大，挫折的路途，我们一起升级打怪兽
 
 ## 机器视觉算法
 
-#### [1. 霍夫变换](./docs/CODE_OF_CONDUCT.html).
+#### [1. Kalman Filter](./docs/SUPPORT.html)
 
 ## 机器学习算法
 
-#### [1. 线性回归](./docs/SUPPORT.html).
+#### [1. Linear Regression](./docs/SUPPORT.html)
 
 ## 深度学习算法
