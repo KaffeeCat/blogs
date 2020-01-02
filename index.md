@@ -4,10 +4,10 @@
 
 ## 机器视觉算法
 
-#### [1. 霍夫变换](./another-page.html).
+#### [1. 霍夫变换](./docs/CODE_OF_CONDUCT.html).
 
 ## 机器学习算法
 
-#### [1. 线性回归](./another-page.html).
+#### [1. 线性回归](./docs/SUPPORT.html).
 
 ## 深度学习算法
