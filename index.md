@@ -1,6 +1,6 @@
 # 咖啡猫的算法屋
 ![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
-[Link to another page](./another-page.html).
+Once you choose your way of life, be brave to stick it out and never return.
 
 ## 机器视觉算法
 
