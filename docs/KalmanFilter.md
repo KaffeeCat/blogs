@@ -16,7 +16,7 @@
 #### 3.1 状态预测
 假设追踪的兔子，其状态仅与位置、速度相关，其k时刻的最佳状态估计（期望）为：
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;
+<img src="https://latex.codecogs.com/png.latex?
 \widehat{x}_k=
 \left[\begin{matrix} 
 position \\ velocity 
@@ -26,11 +26,47 @@ position \\ velocity
 
 状态信息符合分高斯分布，其k时刻的协方差矩阵为<img src="https://latex.codecogs.com/svg.latex?\Large&space; P_k " />：
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;
+<img src="https://latex.codecogs.com/png.latex?
 P_k=
 \left[\begin{matrix} 
 \Sigma_{pp} & \Sigma_{pv} \\
 \Sigma_{vp} & \Sigma_{vv} \\ 
 \end{matrix}\right]" />
 
-假设从k-1时刻，到k时刻，状态变化是线性的，通过上一时刻状态的期望和分布为
+假设从k-1时刻，到k时刻，状态变化是线性的，上一时刻状态的期望和分布，通过状态映射矩阵<img src="https://latex.codecogs.com/svg.latex?\Large&space; F_x" />进行预测，当前时刻的期望和分布分别是：
+
+<img src="https://latex.codecogs.com/png.latex?
+\widehat{x}_k=F_x\widehat{x}_{k-1}
+" />
+
+<img src="https://latex.codecogs.com/png.latex?
+P_x=F_kP_{k-1}F_k^T
+" />
+
+#### 3.2 增加外部影响及不确定性
+一些外部因素会对系统产生影响，例如运动加速度，用<img src="https://latex.codecogs.com/svg.latex?\Large&space; B_k " />：来表达控制矩阵，<img src="https://latex.codecogs.com/svg.latex?\Large&space; \vec{u}_k " />来表达控制向量，纳入预测系统进行修正：
+
+<img src="https://latex.codecogs.com/png.latex?
+\widehat{x}_k=F_x\widehat{x}_{k-1}+B_k\vec{u}_k
+" />
+
+以矩阵形式表达运动状态估计系统为：
+
+<img src="https://latex.codecogs.com/png.latex?
+\left[\begin{matrix}
+position_{k} \\
+velocity_{k}
+\end{matrix}\right]
+=\left[\begin{matrix}
+1 & \Delta t \\
+0 & 1
+\end{matrix}\right]
+\left[\begin{matrix}
+position_{k-1} \\
+velocity_{k-1}
+\end{matrix}\right]
++\left[\begin{matrix}
+\frac{\Delta t^2}{2} \\ \Delta t
+\end{matrix}\right]
+a
+" />
