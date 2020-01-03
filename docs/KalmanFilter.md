@@ -43,7 +43,7 @@ P_k=
 P_x=F_kP_{k-1}F_k^T
 " />
 
-#### 3.2 增加外部影响及不确定性
+#### 3.2 增加外部影响及不确定性（过程噪音）
 一些外部因素会对系统产生影响，例如运动加速度，用<img src="https://latex.codecogs.com/svg.latex?\Large&space; B_k " />：来表达控制矩阵，<img src="https://latex.codecogs.com/svg.latex?\Large&space; \vec{u}_k " />来表达控制向量，纳入预测系统进行修正：
 
 <img src="https://latex.codecogs.com/png.latex?
@@ -70,3 +70,21 @@ velocity_{k-1}
 \end{matrix}\right]
 a
 " />
+
+另外，在追踪过程中，也会遇到一些不确定因素，例如上坡、转弯等，预测状态可能会因此收到偏移，因此，需要在预测过程中，增加不确定因素，称之为**过程噪音**，亦符合高斯分布，协方差矩阵为<img src="https://latex.codecogs.com/svg.latex?\Large&space; Q_k" />，下一时刻的状态估计分布协方差矩阵，加入**过程噪音**后，表达为：
+
+<img src="https://latex.codecogs.com/png.latex?
+P_k=F_kP_{k-1}F_k^T+Q_k
+" />
+
+#### 3.3 观测信息
+当前观测的状态，可能是从各种传感器获取而来，如GPS、物体检测、热度仪、激光雷达等，我们再引入一个线性变换，将当前的状态估计期望和分布，映射到观测空间中，即：
+
+<img src="https://latex.codecogs.com/png.latex?
+\vec{\mu}_{expected}=H_k\widehat{x}_k \\
+" />
+
+<img src="https://latex.codecogs.com/png.latex?
+\Sigma _{expected}=H_kP_kH_k^T
+" />
+
