@@ -149,10 +149,12 @@ K'=P_kH_k^T(H_kP_kH_k^T+R_k)^{-1}
 P_k'=P_k-K'H_kP_k
 " />
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space; \widehat{x}_k' " />即当前时刻的最佳估计，将<img src="https://latex.codecogs.com/svg.latex?\Large&space; {\widehat{x}_k',P_k}' " />放到下一时刻的预测和更新方程中，不断迭代。
+至此，<img src="https://latex.codecogs.com/svg.latex?\Large&space; \widehat{x}_k' " />即当前时刻的最佳估计，将<img src="https://latex.codecogs.com/svg.latex?\Large&space; {\widehat{x}_k',P_k}' " />放到下一时刻的预测和更新方程中，不断迭代。
 
 卡尔曼系统的整体流程结构图如下：
+
 ![](https://pic3.zhimg.com/80/v2-c4db49174bd28fa7634be3858a368e26_hd.jpg)
+
 #### 参考文献：
 
 [1]. [How a Kalman filter works, in pictures](http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/)
