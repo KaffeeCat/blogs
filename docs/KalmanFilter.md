@@ -14,7 +14,7 @@
 由于**物体检测**并非完美，存在一定的错误，可能会将狼检测成兔子，也有可能物体遮挡，找不到兔子了，那么这个时候，大名鼎鼎的卡尔曼滤波就登场了。
 
 #### 3.1 状态预测
-假设追踪的兔子，其状态仅与位置、速度相关，其k时刻的最佳状态估计（期望）为：
+假设追踪的兔子，其状态仅与位置、速度相关，其k时刻的状态估计（期望）为：
 
 <img src="https://latex.codecogs.com/png.latex?
 \widehat{x}_k=
@@ -42,6 +42,8 @@ P_k=
 <img src="https://latex.codecogs.com/png.latex?
 P_x=F_kP_{k-1}F_k^T
 " />
+
+![](https://pic2.zhimg.com/80/v2-1aeabc85ef432999b6126536be07d845_hd.jpg)
 
 #### 3.2 增加外部影响及不确定性（过程噪音）
 一些外部因素会对系统产生影响，例如运动加速度，用<img src="https://latex.codecogs.com/svg.latex?\Large&space; B_k " />：来表达控制矩阵，<img src="https://latex.codecogs.com/svg.latex?\Large&space; \vec{u}_k " />来表达控制向量，纳入预测系统进行修正：
@@ -77,10 +79,12 @@ a
 P_k=F_kP_{k-1}F_k^T+Q_k
 " />
 
-#### 3.3 预测和观测信息相互结合，得到当前时刻的最佳估计，并更新预测系统
-**观测值的高斯分布**：当前观测的状态，可能是从各种传感器获取而来，如GPS、物体检测、热度仪、激光雷达等，我们称当前k时刻传感器观测值为<img src="https://latex.codecogs.com/svg.latex?\Large&space; z_k " />，观测信息存在不确定性，传感器噪音符合高斯分布，用协方差矩阵<img src="https://latex.codecogs.com/svg.latex?\Large&space; R_k " />表示。
+![](https://pic4.zhimg.com/80/v2-7cc51be5e269b579c4588db25daf995f_hd.jpg)
 
-**预测值的高斯分布**再引入一个线性变换，将当前的状态估计期望<img src="https://latex.codecogs.com/svg.latex?\Large&space; \widehat{x}_k " />和高斯分布<img src="https://latex.codecogs.com/svg.latex?\Large&space; P_k " />，映射到观测空间中，即：
+#### 3.3 预测和观测信息相互结合，得到当前时刻的最佳估计，并更新预测系统
+当前观测的状态，可能是从各种传感器获取而来，如GPS、物体检测、热度仪、激光雷达等，我们需要结合观测值和预测值，得到当前时刻的最佳估计。
+
+**预测值的高斯分布**：使用线性变换，将当前的状态估计期望<img src="https://latex.codecogs.com/svg.latex?\Large&space; \widehat{x}_k " />和高斯分布<img src="https://latex.codecogs.com/svg.latex?\Large&space; P_k " />，映射到观测空间中，即：
 
 <img src="https://latex.codecogs.com/png.latex?
 \vec{\mu}_{expected}=H_k\widehat{x}_k \\
@@ -90,7 +94,18 @@ P_k=F_kP_{k-1}F_k^T+Q_k
 \Sigma _{expected}=H_kP_kH_k^T
 " />
 
-这两个高斯分布，都有概率发生，对两个高斯分布进行乘积，得到这两种情况都发生的概率分布，也是符合高斯分布，对其求期望和协方差矩阵：
+![](https://pic1.zhimg.com/80/v2-114204d0be573afac8df2630fbf43374_hd.jpg)
+
+**观测值的高斯分布**：当前k时刻传感器观测值为<img src="https://latex.codecogs.com/svg.latex?\Large&space; z_k " />，观测信息存在不确定性，传感器噪音符合高斯分布，用协方差矩阵<img src="https://latex.codecogs.com/svg.latex?\Large&space; R_k " />表示。
+
+![](https://pic4.zhimg.com/80/v2-2cc213523368e5b0c551522fa917f507_hd.jpg)
+
+
+预测值和观测值的高斯分布，都有概率发生，要对当前时刻的两个高斯分布进行调和，以得到最佳估计
+
+![](https://pic1.zhimg.com/80/v2-501fb01035bdb4d503fa61591f9cc2dc_hd.jpg)
+
+对两个高斯分布进行乘积，得到这两种情况都发生的概率分布，结果也符合高斯分布，对其求期望和协方差矩阵：
 
 <img src="https://latex.codecogs.com/png.latex?
 K=\Sigma_0(\Sigma_0+\Sigma_1)^{-1}
@@ -103,6 +118,8 @@ K=\Sigma_0(\Sigma_0+\Sigma_1)^{-1}
 <img src="https://latex.codecogs.com/png.latex?
 \Sigma=\Sigma_0-K\Sigma_0
 " />
+
+![](https://pic1.zhimg.com/80/v2-15bdb8527c724044528cdaf118480614_hd.jpg)
 
 其中的<img src="https://latex.codecogs.com/svg.latex?\Large&space; K " />，即卡尔曼增益，带入观测及预测的期望及分布情况，整理为：
 
@@ -133,3 +150,9 @@ P_k'=P_k-K'H_kP_k
 " />
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space; \widehat{x}_k' " />即当前时刻的最佳估计，将<img src="https://latex.codecogs.com/svg.latex?\Large&space; {\widehat{x}_k',P_k}' " />放到下一时刻的预测和更新方程中，不断迭代。
+
+卡尔曼系统的整体流程结构图如下：
+![](https://pic3.zhimg.com/80/v2-c4db49174bd28fa7634be3858a368e26_hd.jpg)
+#### 参考文献：
+
+[1]. [How a Kalman filter works, in pictures](http://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/)
