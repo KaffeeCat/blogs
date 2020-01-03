@@ -77,8 +77,10 @@ a
 P_k=F_kP_{k-1}F_k^T+Q_k
 " />
 
-#### 3.3 观测信息
-当前观测的状态，可能是从各种传感器获取而来，如GPS、物体检测、热度仪、激光雷达等，我们再引入一个线性变换，将当前的状态估计期望和分布，映射到观测空间中，即：
+#### 3.3 预测和观测信息相互结合，得到当前时刻的最佳估计，并更新预测系统
+**观测值的高斯分布**：当前观测的状态，可能是从各种传感器获取而来，如GPS、物体检测、热度仪、激光雷达等，我们称当前k时刻传感器观测值为<img src="https://latex.codecogs.com/svg.latex?\Large&space; z_k " />，观测信息存在不确定性，传感器噪音符合高斯分布，用协方差矩阵<img src="https://latex.codecogs.com/svg.latex?\Large&space; R_k " />表示。
+
+**预测值的高斯分布**再引入一个线性变换，将当前的状态估计期望<img src="https://latex.codecogs.com/svg.latex?\Large&space; \widehat{x}_k " />和高斯分布<img src="https://latex.codecogs.com/svg.latex?\Large&space; P_k " />，映射到观测空间中，即：
 
 <img src="https://latex.codecogs.com/png.latex?
 \vec{\mu}_{expected}=H_k\widehat{x}_k \\
@@ -88,3 +90,46 @@ P_k=F_kP_{k-1}F_k^T+Q_k
 \Sigma _{expected}=H_kP_kH_k^T
 " />
 
+这两个高斯分布，都有概率发生，对两个高斯分布进行乘积，得到这两种情况都发生的概率分布，也是符合高斯分布，对其求期望和协方差矩阵：
+
+<img src="https://latex.codecogs.com/png.latex?
+K=\Sigma_0(\Sigma_0+\Sigma_1)^{-1}
+" />
+
+<img src="https://latex.codecogs.com/png.latex?
+\vec{\mu}=\vec{\mu}_1+K(\vec{\mu}_1-\vec{\mu}_0)
+" />
+
+<img src="https://latex.codecogs.com/png.latex?
+\Sigma=\Sigma_0-K\Sigma_0
+" />
+
+其中的<img src="https://latex.codecogs.com/svg.latex?\Large&space; K " />，即卡尔曼增益，带入观测及预测的期望及分布情况，整理为：
+
+<img src="https://latex.codecogs.com/png.latex?
+K=H_kP_kH_k^T(H_kP_kH_k^T+R_k)^{-1}
+" />
+
+<img src="https://latex.codecogs.com/png.latex?
+H_k\widehat{x}_k'=H_k\widehat{x}_k+K(\vec{z}_k-H_k\widehat{x}_k)
+" />
+
+<img src="https://latex.codecogs.com/png.latex?
+H_kP_k'H_k=H_kP_kH_k-KH_kP_kH_k
+" />
+
+公式可简化为：
+
+<img src="https://latex.codecogs.com/png.latex?
+K'=P_kH_k^T(H_kP_kH_k^T+R_k)^{-1}
+" />
+
+<img src="https://latex.codecogs.com/png.latex?
+\widehat{x}_k'=\widehat{x}_k+K‘(\vec{z}_k-H_k\widehat{x}_k)
+" />
+
+<img src="https://latex.codecogs.com/png.latex?
+P_k'=P_k-K'H_kP_k
+" />
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space; \widehat{x}_k' " />即当前时刻的最佳估计，将<img src="https://latex.codecogs.com/svg.latex?\Large&space; {\widehat{x}_k',P_k}' " />放到下一时刻的预测和更新方程中，不断迭代。
